@@ -1,5 +1,4 @@
 @extends('system.app')
-
 @section('content')
 <div class="d-flex justify-content-center align-items-center">
     <div class="col-lg-2">
