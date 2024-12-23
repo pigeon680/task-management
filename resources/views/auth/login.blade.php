@@ -1,7 +1,12 @@
 @extends('system.app')
 @section('content')
+
 <div class="d-flex justify-content-center align-items-center">
+
     <div class="col-lg-2">
+        <h1 style="text-align: center; font-size: x-large; padding-bottom: 3rem; padding-top: 6rem;">
+            Task Management System
+        </h1>
         <div class="card p-4">
             <form method="POST" action="{{ route('login') }}">
                 @csrf
