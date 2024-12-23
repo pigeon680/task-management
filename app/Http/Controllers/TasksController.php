@@ -22,8 +22,10 @@ class TasksController extends Controller
         $task = Task::createTask([
             'project' => $request->project,
             'name' => $request->name,
+            'description' => $request->description,
             'priority' => 0,
-            'is_completed' => 0,
+            'is_completed' => $request->is_completed,
+            // 'is_pending' => $request->is_pending,
             'created_at' => $time,
             'updated_at' => $time,
         ]);

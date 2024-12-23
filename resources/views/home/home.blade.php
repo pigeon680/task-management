@@ -39,11 +39,11 @@
                                 <div class="form-group">
                                     <label for="filter-form-task-status" class="form-control-label">Status</label>
                                     <select name="statusFilter" class="form-control" id="filter-form-task-status">
-                                        <option {{ $statusFilter == 'all' ? 'selected' : '' }} value="all">All</option>
+                                        <option {{ $statusFilter == 'all' ? 'selected' : '' }} value="all">Pendding</option>
+                                        <option {{ $statusFilter == 'incomplete' ? 'selected' : '' }} value="incomplete">
+                                            In-Progress</option>
                                         <option {{ $statusFilter == 'completed' ? 'selected' : '' }} value="completed">
                                             Completed</option>
-                                        <option {{ $statusFilter == 'incomplete' ? 'selected' : '' }} value="incomplete">
-                                            Incomplete</option>
                                     </select>
                                 </div>
                             </div>
@@ -57,7 +57,7 @@
                             </div>
                         </div>
                     </form>
-                    <ul class="list-group">
+                    {{-- <ul class="list-group">
                         @if (count($tasks) > 0)
                             @foreach ($tasks as $task)
                                 <li class="list-group-item border-1 p-4 mb-2 bg-gray-100 border-radius-lg task-item"
@@ -99,8 +99,6 @@
                                         </div>
                                     </div>
                                 </li>
-
-
                                 <div class="modal fade" id="edit-task-id-{{ $task->id }}" tabindex="-1" role="dialog"
                                     aria-labelledby="edit-task-id-{{ $task->id }}" aria-hidden="true">
                                     <div class="modal-dialog modal- modal-dialog-centered modal-lg" role="document">
@@ -159,7 +157,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="modal fade" id="delete-task-id-{{ $task->id }}" tabindex="-1"
                                     role="dialog" aria-labelledby="delete-task-id-{{ $task->id }}"
                                     aria-hidden="true">
@@ -170,7 +167,7 @@
                                                     required</h6>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close">
-                                                    <span aria-hidden="true">×</span>
+                                                    <span aria-hidden="false">×</span>
                                                 </button>
                                             </div>
                                             <div class="modal-body">
@@ -198,12 +195,142 @@
 
                                     <i style="font-size: 40px" class="fa fa-warning text-muted"></i>
 
-                                    <h3 class="text-muted mt-2">No task attached at the moment! Try adding a new one.</h3>
+                                    <h3 class="text-muted mt-2">Empty Data</h3>
 
                                 </div>
                             </div>
                         @endif
+                    </ul> --}}
+                    <ul class="list-group">
+                        <div class="table-responsive">
+                            <table class="table align-items-center mb-0" style="text-align: center;">
+                                <thead>
+                                    <tr>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Title</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Project Name</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Description</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Status</th>
+                                        {{-- <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Complete</th> --}}
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Due Date</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (count($tasks) > 0)
+                                        @foreach ($tasks as $task)
+                                            <tr>
+                                                <td>
+                                                    <span class="text-sm">{{ $task->name }}</span>
+                                                </td>
+                                                <td>
+                                                    <span class="text-sm">{{ $task->project_name }}</span>
+                                                </td>
+                                                <td>
+                                                    <span class="text-sm">{{ $task->description }}</span>
+                                                </td>
+                                                <td>
+                                                    @if ($task->is_completed == 'Pending')
+                                                        <span class="badge bg-warning">Pending</span>
+                                                    @elseif ($task->is_completed == 'In-Progress')
+                                                        <span class="badge bg-primary">In-Progress</span>
+                                                    @else
+                                                        <span class="badge bg-success">Completed</span>
+                                                    @endif
+                                                </td>
+                                                {{-- <td>
+                                                    <input type="checkbox" class="toggle-completion"
+                                                        data-task-id="{{ $task->id }}" {{ $task->is_completed ? 'checked' : '' }}>
+                                                </td> --}}
+                                                <td>
+                                                    <span class="text-sm">{{ $task->created_at }}</span>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-link text-dark px-3 mb-0" data-bs-toggle="modal"
+                                                        data-bs-target="#edit-task-id-{{ $task->id }}">
+                                                        <i class="fas fa-pencil-alt text-dark me-2"></i>Edit
+                                                    </button>
+                                                    <button class="btn btn-link text-danger text-gradient px-3 mb-0"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#delete-task-id-{{ $task->id }}">
+                                                        <i class="far fa-trash-alt me-2"></i>Delete
+                                                    </button>
+                                                </td>
+                                            </tr>
 
+                                            <!-- Edit Task Modal -->
+                                            <div class="modal fade" id="edit-task-id-{{ $task->id }}" tabindex="-1" role="dialog"
+                                                aria-labelledby="edit-task-id-{{ $task->id }}" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h6 class="modal-title">Edit Task</h6>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">×</span>
+                                                            </button>
+                                                        </div>
+                                                        <form action="{{ route('tasks.update', ['id' => $task->id]) }}" method="post">
+                                                            @csrf
+                                                            <div class="modal-body">
+                                                                <div class="form-group">
+                                                                    <label for="edit-task-form-task-name" class="form-control-label">Task Name</label>
+                                                                    <input class="form-control" id="edit-task-form-task-name" name="name" type="text" value="{{ $task->name }}" required>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="edit-task-form-task-project" class="form-control-label">Project</label>
+                                                                    <select name="project" class="form-control" id="edit-task-form-task-project">
+                                                                        @foreach ($projects as $project)
+                                                                            <option value="{{ $project->id }}" {{ $project->id == $task->project ? 'selected' : '' }}>
+                                                                                {{ $project->name }}
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="submit" class="btn bg-gradient-primary">Save changes</button>
+                                                                <button type="button" class="btn btn-link text-muted ml-auto" data-bs-dismiss="modal">Close</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Delete Task Modal -->
+                                            <div class="modal fade" id="delete-task-id-{{ $task->id }}" tabindex="-1" role="dialog"
+                                                aria-labelledby="delete-task-id-{{ $task->id }}" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered modal-danger" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h6 class="modal-title">Your attention is required</h6>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">×</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="py-3 text-center">
+                                                                <i style="font-size: 35px;" class="far fa-trash-alt text-gradient text-danger"></i>
+                                                                <h4 class="text-gradient text-danger mt-4">Are you sure you want to delete this task?</h4>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <a href="{{ route('tasks.delete', ['id' => $task->id]) }}" class="btn btn-danger">Yes, Delete</a>
+                                                            <button type="button" class="btn btn-link text-muted ml-auto" data-bs-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        <tr>
+                                            <td colspan="5" class="text-center text-muted">
+                                                <i class="fa fa-warning"></i>
+                                                <h3>Empty Data</h3>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
                     </ul>
                 </div>
             </div>
@@ -392,7 +519,7 @@
         <div class="modal-dialog modal- modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title" id="modal-title-default">Add New Project</h6>
+                    <h6 class="modal-title" id="modal-title-default">Add New Task</h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -400,17 +527,15 @@
                 <form action="{{ route('tasks.insert') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
-
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="add-task-form-task-name" class="form-control-label">Task Name</label>
+                                    <label for="add-task-form-task-name" class="form-control-label">Title</label>
                                     <input class="form-control" id="add-task-form-task-name" name="name"
-                                        type="text" required>
+                                        type="text" placeholder="Title" required>
                                 </div>
                             </div>
                         </div>
-
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
@@ -423,13 +548,34 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="add-task-form-task-project" class="form-control-label">Status</label>
+                                    <select name="is_completed" id="task-status" class="form-control" required>
+                                        {{-- @foreach ($tasks as $task) --}}
+                                        <option value="Pending" {{ $statusFilter == 'Pending' ? 'selected' : '' }}>Pending</option>
+                                        <option value="In-Progress" {{ $statusFilter == 'In-Progress' ? 'selected' : '' }}>In-Progress</option>
+                                        <option value="Completed" {{ $statusFilter == 'Completed' ? 'selected' : '' }}>Completed</option>
+                                        {{-- @endforeach --}}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="add-task-form-task-description" class="form-control-label">Description</label>
+                                    <textarea class="form-control" id="add-task-form-task-description" name="description"
+                                        type="text" placeholder="Description about project" required></textarea>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn bg-gradient-primary">Save changes</button>
                         <button type="button" class="btn btn-link  ml-auto" data-bs-dismiss="modal">Close</button>
                     </div>
-
                 </form>
             </div>
         </div>
@@ -446,7 +592,7 @@
             $('.toggle-completion').change(function() {
                 var taskId = $(this).data('task-id');
                 var isChecked = $(this).is(':checked');
-                var listItem = $(this).closest('li');
+                var listItem = $(this).closest('tr');
 
                 $.ajax({
                     url: '<?php echo route('tasks.toggleCompletion'); ?>' + "/" + taskId,
@@ -474,10 +620,10 @@
                                     'text-decoration': 'none'
                                 });
                                 listItem.find('.badge').removeClass('bg-gradient-success')
-                                    .addClass('bg-gradient-warning').text('INCOMPLETE');
+                                    .addClass('bg-gradient-warning').text('IN-PROGRESS');
                                 iziToast.success({
                                     title: 'Successful',
-                                    message: 'Task marked as incomplete.',
+                                    message: 'Task marked as in-progress.',
                                     position: 'topRight'
                                 });
                             }

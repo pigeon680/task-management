@@ -22,8 +22,11 @@ class CreateTasksTable extends Migration
             $table->unsignedBigInteger('project');
             $table->foreign('project')->references('id')->on('projects');
             $table->longText('name');
+            $table->text('description')->nullable();
             $table->bigInteger('priority');
-            $table->tinyInteger('is_completed')->default(0);
+            $table->text('is_completed')->nullable();
+            // $table->tinyInteger('is_pending')->default(0);
+
             $table->timestamps();
             $table->softDeletes();
         });

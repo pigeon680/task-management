@@ -36,7 +36,7 @@ class HomeController extends Controller
             // Get tasks with applied filters
             $tasks = Task::getAllTasksWithFilters($tasksFilter);
         }
-
+        // dd($tasks);
         // Return view with data
         return view('home.home')->with([
             'projects' => $projects,

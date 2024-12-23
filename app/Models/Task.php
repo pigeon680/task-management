@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -15,7 +16,7 @@ class Task extends Model
      *
      */
     protected $fillable = [
-        'project', 'name', 'priority', 'is_completed'
+        'project', 'name', 'description', 'priority', 'is_completed'
     ];
 
     /**
