@@ -38,9 +38,9 @@ class UserController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            return redirect()->intended('/home');
+            return redirect()->intended('/');
         }
-        toastr()->error('Invalid email or password');
+        // toastr()->error('Invalid email or password');
         return redirect('/login')->with('error', 'Invalid credentials. Please try again.');
     }
 }

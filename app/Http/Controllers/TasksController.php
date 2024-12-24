@@ -49,12 +49,16 @@ class TasksController extends Controller
         $validatedData = $request->validate([
             'project' => 'required|exists:projects,id',
             'name' => 'required|string',
+            'description' => 'required|string',
         ]);
 
         // Update the task properties
         $task->updateTask([
             'project' => $request->project,
             'name' => $request->name,
+            'description' => $request->description,
+            'is_completed' => $request->is_completed,
+            'priority' => 0
         ]);
 
         // Redirect or show a message indicating successful update

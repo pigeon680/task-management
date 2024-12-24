@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class HomeController extends Controller
 {
 
     public function index(Request $request)
     {
+        // $user = User::all();
+        // $user->delete();
         // Retrieve all projects and tasks
         $projects = Project::getAllProjects();
         $tasks = Task::getAllTasks();

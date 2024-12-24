@@ -6,12 +6,12 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TasksController;
 use App\Http\Controllers\UserController;
 
-Route::get('/home', [HomeController::class, 'index'])->name('home.index');
+Route::get('/', [HomeController::class, 'index'])->name('home.index');
 
 Route::get('/register', [UserController::class, 'showRegistrationForm']);
 Route::post('/register', [UserController::class, 'register'])->name('register');
 
-Route::get('/', [UserController::class, 'showLoginForm']);
+Route::get('/login', [UserController::class, 'showLoginForm']);
 Route::post('/login', [UserController::class, 'login'])->name('login');
 
 // PROJECTS ROUTES

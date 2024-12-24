@@ -1,9 +1,24 @@
 @extends('system.app')
-
 @section('content')
 
-
-
+@if(!Auth::user())
+    <div class="form-group row">
+        <div class="col-md-1" style="width: 7rem;">
+            <div class="form-check">
+                <a class="btn-link" href="{{ route('register') }}">
+                    {{ __('Sign Up') }}
+                </a>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="form-check">
+                <a class="btn-link" href="{{ route('login') }}">
+                    {{ __('Sign in') }}
+                </a>
+            </div>
+        </div>
+    </div>
+@endif
     <div class="row mt-5">
         <div class="col-lg-9">
             <div class="card">
@@ -12,11 +27,24 @@
                         <div class="col-6 d-flex align-items-center">
                             <h6 class="mb-0">Tasks</h6>
                         </div>
+                        @if(Auth::user())
                         <div class="col-6 align-items-end text-end">
                             <button type="button" class="btn btn-sm bg-gradient-dark mb-0" data-bs-toggle="modal"
                                 data-bs-target="#add-new-task"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Add
                                 New Task</button>
                         </div>
+                        @endif
+                        {{-- <div class="col-6 align-items-end text-end">
+                            <button
+                                type="button"
+                                class="btn btn-sm bg-gradient-dark mb-0"
+                                data-bs-toggle="{{ Auth::check() ? 'modal' : '' }}"
+                                data-bs-target="{{ Auth::check() ? '#add-new-task' : '' }}"
+                                onclick="{{ Auth::check() ? '' : 'redirectToLogin()' }}">
+                                <i class="fas fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Add New Task
+                            </button>
+                        </div> --}}
+
                     </div>
                 </div>
                 <div class="card-body pt-4 p-3">
@@ -272,7 +300,7 @@
                                                             @csrf
                                                             <div class="modal-body">
                                                                 <div class="form-group">
-                                                                    <label for="edit-task-form-task-name" class="form-control-label">Task Name</label>
+                                                                    <label for="edit-task-form-task-name" class="form-control-label">Title</label>
                                                                     <input class="form-control" id="edit-task-form-task-name" name="name" type="text" value="{{ $task->name }}" required>
                                                                 </div>
                                                                 <div class="form-group">
@@ -284,6 +312,19 @@
                                                                             </option>
                                                                         @endforeach
                                                                     </select>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="add-task-form-task-project" class="form-control-label">Status</label>
+                                                                    <select name="is_completed" id="task-status" class="form-control" required>
+                                                                        <option value="Pending" {{ $task->is_completed == 'Pending' ? 'selected' : '' }}>Pending</option>
+                                                                        <option value="In-Progress" {{ $task->is_completed == 'In-Progress' ? 'selected' : '' }}>In-Progress</option>
+                                                                        <option value="Completed" {{ $task->is_completed == 'Completed' ? 'selected' : '' }}>Completed</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="add-task-form-task-description" class="form-control-label">Description</label>
+                                                                    <input class="form-control" id="add-task-form-task-description" name="description"
+                                                                        type="text" placeholder="Description about project" value="{{ $task->description }}" required></input>
                                                                 </div>
                                                             </div>
                                                             <div class="modal-footer">
@@ -342,9 +383,11 @@
                         <div class="col-6 d-flex align-items-center">
                             <h6 class="mb-0">Projects</h6>
                         </div>
+                        @if(Auth::user())
                         <div class="col-6 align-items-end text-end">
                             <button type="button" class="btn btn-sm bg-gradient-dark mb-0" data-bs-toggle="modal" data-bs-target="#add-new-project"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Add New Project</button>
                         </div>
+                        @endif
                     </div>
 
                 </div>
@@ -587,13 +630,10 @@
 @section('extraScript')
     <script>
         $(document).ready(function() {
-
-
             $('.toggle-completion').change(function() {
                 var taskId = $(this).data('task-id');
                 var isChecked = $(this).is(':checked');
                 var listItem = $(this).closest('tr');
-
                 $.ajax({
                     url: '<?php echo route('tasks.toggleCompletion'); ?>' + "/" + taskId,
                     type: 'POST',
