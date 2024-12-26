@@ -34,16 +34,7 @@
                                 New Task</button>
                         </div>
                         @endif
-                        {{-- <div class="col-6 align-items-end text-end">
-                            <button
-                                type="button"
-                                class="btn btn-sm bg-gradient-dark mb-0"
-                                data-bs-toggle="{{ Auth::check() ? 'modal' : '' }}"
-                                data-bs-target="{{ Auth::check() ? '#add-new-task' : '' }}"
-                                onclick="{{ Auth::check() ? '' : 'redirectToLogin()' }}">
-                                <i class="fas fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Add New Task
-                            </button>
-                        </div> --}}
+
 
                     </div>
                 </div>
